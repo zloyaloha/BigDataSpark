@@ -47,7 +47,7 @@
 4. MongoDB
 5. Valkey
 
-![Лабораторная работа №2](https://github.com/user-attachments/assets/94c67f92-2031-42e2-9416-8f485459184c)
+![Лабораторная работа №2](https://github.com/user-attachments/assets/2b854382-4c36-4542-a7fb-04fe82a6f6fa)
 
 
 Алгоритм:
