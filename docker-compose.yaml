@@ -1,0 +1,64 @@
+services:
+  postgres:
+    image: postgres:13.3
+    environment:
+      POSTGRES_DB: "lab2BDA"
+      POSTGRES_USER: "zloyaloha"
+      POSTGRES_PASSWORD: "12341234"
+    ports:
+      - "5432:5432"
+    networks:
+      - lab-network
+
+  mongodb:
+    image: mongo:6.0
+    container_name: mongodb
+    restart: always
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: zloyaloha
+      MONGO_INITDB_ROOT_PASSWORD: 12341234
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo_data:/data/db
+    networks:
+      - lab-network
+
+  mongo-express:
+    image: mongo-express:latest
+    restart: always
+    environment:
+      ME_CONFIG_MONGODB_ADMINUSERNAME: zloyaloha
+      ME_CONFIG_MONGODB_ADMINPASSWORD: 12341234
+      ME_CONFIG_MONGODB_SERVER: mongodb
+      ME_CONFIG_MONGODB_AUTH_DATABASE: admin   # Добавлено
+    ports:
+      - "8081:8081"
+    depends_on:
+      - mongodb
+    networks:
+      - lab-network
+
+  spark:
+    image: jupyter/pyspark-notebook:latest
+    ports:
+      - "8888:8888"
+    volumes:
+      - ./notebooks:/home/jovyan/work
+    environment:
+      - PYSPARK_PYTHON=python3
+      - PYSPARK_DRIVER_PYTHON=jupyter
+      - PYSPARK_DRIVER_PYTHON_OPTS=notebook
+      - MONGO_URI=mongodb://zloyaloha:12341234@mongodb:27017
+    networks:
+      - lab-network
+    depends_on:
+      - postgres
+      - mongodb
+
+volumes:
+  mongo_data:
+
+networks:
+  lab-network:
+    driver: bridge
