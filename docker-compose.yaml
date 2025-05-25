@@ -9,7 +9,21 @@ services:
       - "5432:5432"
     networks:
       - lab-network
-
+  clickhouse:
+    image: clickhouse/clickhouse-server:latest
+    container_name: clickhouse-server
+    ports:
+      - "8123:8123"
+      - "9000:9000"
+    environment:
+      CLICKHOUSE_DB: default
+      CLICKHOUSE_USER: zloyaloha
+      CLICKHOUSE_PASSWORD: 12341234
+    volumes:
+      - clickhouse_data:/var/lib/clickhouse
+      - ./init/init_clickhouse.sql:/docker-entrypoint-initdb.d/init_clickhouse.sql
+    networks:
+      - lab-network
   mongodb:
     image: mongo:6.0
     container_name: mongodb
@@ -58,6 +72,7 @@ services:
 
 volumes:
   mongo_data:
+  clickhouse_data:
 
 networks:
   lab-network:
